@@ -1,2 +1,2 @@
 # SMART
-SMART (SegMentation Algebraic Reconstruction velocimeTry) : offers a unified platform for detecting particles or tracers in a dense dynamic system, studied using X-Ray tomography.
+SMART (SegMentation Algebraic Reconstruction velocimeTry) is a library for detecting particles or tracers in dense dynamic 3D systems, studied using X-Ray tomography.
