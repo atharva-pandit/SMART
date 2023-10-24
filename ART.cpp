@@ -1,10 +1,11 @@
 #include "basic_func.hpp"
 #include "imageOpt.hpp"
 
+//global variables
 constexpr int maxvox {500};		//number of voxels in each dimension
 auto voxgrid = new int[maxvox][maxvox][maxvox];	//3D voxel grid maxvox*maxvox*maxvox
-auto labels = new int[maxvox][maxvox][maxvox]; //3D voxel grid to store local maxima
-float scale {maxvox/100.0};	// voxels per mm; maxvox/scale = extent of grid in mm
+auto labels = new int[maxvox][maxvox][maxvox]; //label for each voxel
+float scale {maxvox/100.0};	// voxels per mm
 
 #include "ART.hpp"
 #include "boxhit.hpp"
@@ -14,7 +15,7 @@ int main() {
 
 Timer time;
 
-constexpr int iterations{10}, perc{2};
+constexpr int iterations{10}, perc{2}, number_of_frames {1};
 constexpr bool do_ART {0}, do_MART {0}, do_SBP {1};
 constexpr float tracer_rad {4.35327};
 int labelcount {};
@@ -193,36 +194,36 @@ for (it = label_cnt.begin(); it != label_cnt.end(); it++) {
 	if (it->second > min_blob_size) label_list.insert({it->first, it->second});
 }
 
-//CoordInt pointpoint;
-//std::vector<CoordId> distmap;
-//std::string filefile {"points_dist.dat"};
-//clearfile(filefile);
+CoordInt pointpoint;
+std::vector<CoordId> distmap;
+std::string filefile {"points_dist.dat"};
+clearfile(filefile);
 
-//std::cout << "here 2" << '\n';
-////while (!big_blobs.empty()) {
-//	for (it = big_blobs.begin(); it != big_blobs.end(); it++) {
-//		std::vector<CoordInt> pointList;
-//		for (int i=0; i<maxvox; i++) {
-//			for (int j=0; j<maxvox; j++) {
-//				for (int k=0; k<maxvox; k++) {
-//					if ( labels[i][j][k] == it->first ) {
-//						pointpoint.x = i;
-//						pointpoint.y = j;
-//						pointpoint.z = k;
-//						pointList.emplace_back(pointpoint);
-//					}
-//				}
-//			}
-//		}
-//		distmap = distanceMap(pointList);
-//		for (CoordId& pt : distmap) label_cnt = add_labels(labelcount);
-//		//std::map<int,int> big_blobs.clear();
-//		for (it = label_cnt.begin(); it != label_cnt.end(); it++) {
-//			//if (it->second > max_blob_size/2) {big_blobs.insert({it->first, it->second}); std::cout << "help\n";}
-//			if (it->second > min_blob_size/5) label_list.insert({it->first, it->second});
-//		}
-//	}
-////}
+std::cout << "here 2" << '\n';
+//while (!big_blobs.empty()) {
+	for (it = big_blobs.begin(); it != big_blobs.end(); it++) {
+		std::vector<CoordInt> pointList;
+		for (int i=0; i<maxvox; i++) {
+			for (int j=0; j<maxvox; j++) {
+				for (int k=0; k<maxvox; k++) {
+					if ( labels[i][j][k] == it->first ) {
+						pointpoint.x = i;
+						pointpoint.y = j;
+						pointpoint.z = k;
+						pointList.emplace_back(pointpoint);
+					}
+				}
+			}
+		}
+		distmap = distanceMap(pointList);
+		for (CoordId& pt : distmap) label_cnt = add_labels(labelcount);
+		//std::map<int,int> big_blobs.clear();
+		for (it = label_cnt.begin(); it != label_cnt.end(); it++) {
+			//if (it->second > max_blob_size/2) {big_blobs.insert({it->first, it->second}); std::cout << "help\n";}
+			if (it->second > min_blob_size/5) label_list.insert({it->first, it->second});
+		}
+	}
+//}
 
 std::cout << "here 3" << '\n';
 //writeCoordId(filefile, distmap);
